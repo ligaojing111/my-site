@@ -1,0 +1,518 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f7f2">
+  <title>饭点灵感 · 今天午饭吃什么</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #26332d;
+      --muted: #7b857e;
+      --green: #426b50;
+      --green-dark: #31533c;
+      --green-light: #eaf0e8;
+      --paper: #f7f7f2;
+      --white: #fff;
+      --line: #e9ece5;
+      --orange: #e99a59;
+      --shadow: 0 18px 55px rgb(41 56 44 / 7%);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background:
+        radial-gradient(ellipse at 6% 4%, rgb(228 237 222 / 70%), transparent 26rem),
+        var(--paper);
+      color: var(--ink);
+      font: 15px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+        "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    }
+
+    button, input { font: inherit; }
+    button { color: inherit; }
+    .shell { width: min(1120px, calc(100% - 48px)); margin: 0 auto; }
+
+    header {
+      height: 82px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgb(61 84 66 / 9%);
+    }
+
+    .brand { display: flex; align-items: center; gap: 11px; font-weight: 750; letter-spacing: .02em; }
+    .brand-mark {
+      width: 37px; height: 37px; display: grid; place-items: center;
+      border-radius: 13px; background: var(--green); color: white; font-size: 20px;
+    }
+    .brand small { display: block; margin-top: 1px; color: var(--muted); font-size: 11px; font-weight: 500; letter-spacing: .06em; }
+    .header-note { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 13px; }
+    .online-dot { width: 7px; height: 7px; border-radius: 50%; background: #7ba37b; }
+
+    main { padding: 45px 0 54px; }
+    .intro { margin-bottom: 28px; }
+    .eyebrow { color: var(--green); font-size: 12px; font-weight: 700; letter-spacing: .14em; }
+    h1 { margin: 8px 0 5px; font-size: clamp(27px, 4vw, 36px); line-height: 1.25; letter-spacing: -.045em; }
+    .intro p { margin: 0; color: var(--muted); font-size: 14px; }
+    .layout { display: grid; grid-template-columns: minmax(0, 1.14fr) minmax(340px, .86fr); gap: 22px; align-items: start; }
+    .panel { border: 1px solid rgb(42 62 46 / 7%); border-radius: 22px; background: var(--white); box-shadow: var(--shadow); }
+    .preferences { padding: 26px 28px 24px; }
+    .panel-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; margin-bottom: 22px; }
+    .panel-heading h2 { margin: 0; font-size: 18px; letter-spacing: -.02em; }
+    .panel-heading p { margin: 4px 0 0; color: var(--muted); font-size: 12px; }
+    .step { flex: 0 0 auto; padding: 5px 10px; border-radius: 99px; background: #f2f5f0; color: var(--green); font-size: 11px; font-weight: 700; }
+    .field + .field { margin-top: 22px; }
+    .field-label { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 13px; font-weight: 700; }
+    .field-label span:last-child { color: #a1aaa2; font-size: 11px; font-weight: 500; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip {
+      min-height: 34px; padding: 7px 13px; border: 1px solid var(--line); border-radius: 99px;
+      background: white; color: #69746c; cursor: pointer; font-size: 12px; transition: .18s ease;
+    }
+    .chip:hover { border-color: #aec2b0; }
+    .chip.selected { border-color: #cfddcf; background: var(--green-light); color: var(--green-dark); font-weight: 650; }
+    .chip.avoid.selected { border-color: #f3d9c6; background: #fff4eb; color: #9c5f32; }
+    .custom-ingredient { display: flex; gap: 8px; margin-top: 10px; }
+    .custom-ingredient input {
+      width: 0; flex: 1; min-width: 0; padding: 9px 12px; border: 1px solid var(--line);
+      border-radius: 10px; outline: none; background: #fcfcfa; font-size: 12px;
+    }
+    .custom-ingredient input:focus { border-color: #9ab49b; }
+    .small-button { padding: 8px 13px; border: 1px solid var(--line); border-radius: 10px; background: white; cursor: pointer; font-size: 12px; }
+    .small-button:hover { background: #f7f9f5; }
+    .rule-list { display: grid; gap: 10px; }
+    .rule {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      padding: 11px 13px; border: 1px solid #f0f1ec; border-radius: 12px; background: #fcfcfa;
+    }
+    .rule strong { display: block; font-size: 12px; }
+    .rule small { display: block; margin-top: 2px; color: var(--muted); font-size: 11px; }
+    .switch { position: relative; width: 38px; height: 22px; flex: 0 0 auto; }
+    .switch input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+    .switch span { position: absolute; inset: 0; border-radius: 99px; background: #d9ded8; cursor: pointer; transition: .2s; }
+    .switch span::after { content: ""; position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; border-radius: 50%; background: white; box-shadow: 0 1px 3px #0002; transition: .2s; }
+    .switch input:checked + span { background: #5b8663; }
+    .switch input:checked + span::after { transform: translateX(16px); }
+    .switch input:focus-visible + span { outline: 3px solid #bdd1bf; }
+    .recommend-button {
+      width: 100%; margin-top: 23px; padding: 14px 18px; border: 0; border-radius: 13px;
+      background: var(--green); color: white; cursor: pointer; font-weight: 700; letter-spacing: .02em;
+      box-shadow: 0 7px 16px rgb(66 107 80 / 20%); transition: .18s ease;
+    }
+    .recommend-button:hover { transform: translateY(-1px); background: var(--green-dark); }
+    .privacy-note { margin: 10px 0 0; text-align: center; color: #9aa39b; font-size: 10px; }
+
+    .result-panel { overflow: hidden; }
+    .result-top { padding: 23px 25px 0; }
+    .result-title { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .result-title h2 { margin: 0; font-size: 17px; }
+    .date-pill { color: var(--muted); font-size: 11px; }
+    .result-caption { margin: 4px 0 0; color: var(--muted); font-size: 12px; }
+    .dish-art {
+      position: relative; display: grid; place-items: center; height: 186px; margin: 17px 19px 0;
+      overflow: hidden; border-radius: 16px; background: linear-gradient(135deg, #eef1df, #f8e7d3);
+    }
+    .dish-art::before, .dish-art::after { content: ""; position: absolute; border: 1px solid rgb(255 255 255 / 60%); border-radius: 50%; }
+    .dish-art::before { width: 220px; height: 220px; }
+    .dish-art::after { width: 168px; height: 168px; }
+    .dish-emoji { z-index: 1; font-size: 91px; filter: drop-shadow(0 12px 10px rgb(77 69 47 / 15%)); transform: translateY(-2px); }
+    .art-label { position: absolute; right: 13px; bottom: 12px; z-index: 1; padding: 5px 9px; border-radius: 99px; background: rgb(255 255 255 / 78%); color: #667269; font-size: 10px; }
+    .dish-content { padding: 17px 25px 21px; }
+    .dish-name-line { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+    .dish-name { margin: 0; font-size: 21px; letter-spacing: -.04em; }
+    .price { color: var(--green); font-size: 18px; font-weight: 750; white-space: nowrap; }
+    .shop { margin-top: 4px; color: var(--muted); font-size: 11px; }
+    .meta { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 14px; }
+    .meta span { padding: 5px 9px; border-radius: 7px; background: #f5f6f2; color: #657168; font-size: 10px; }
+    .reason-box { margin-top: 14px; padding: 11px 12px; border-radius: 11px; background: #f4f7f2; color: #526d57; font-size: 11px; }
+    .reason-box strong { margin-right: 5px; }
+    .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin-top: 16px; }
+    .actions button { padding: 11px 9px; border-radius: 11px; cursor: pointer; font-size: 11px; font-weight: 650; transition: .18s; }
+    .secondary-action { border: 1px solid var(--line); background: white; }
+    .secondary-action:hover { background: #f8f9f6; }
+    .primary-action { border: 1px solid var(--green); background: var(--green); color: white; }
+    .primary-action:hover { background: var(--green-dark); }
+    .primary-action:disabled { border-color: #91a792; background: #91a792; cursor: default; }
+    .history { padding: 16px 25px 18px; border-top: 1px solid #f0f1ec; background: #fdfdfb; }
+    .history-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 9px; }
+    .history-head strong { font-size: 11px; }
+    .text-button { padding: 0; border: 0; background: transparent; color: #849087; cursor: pointer; font-size: 10px; }
+    .text-button:hover { color: var(--green); }
+    .history-row { display: flex; align-items: center; gap: 9px; color: #737e75; font-size: 10px; }
+    .history-row + .history-row { margin-top: 7px; }
+    .history-day { width: 35px; color: #a0a9a1; }
+    .history-dish { color: var(--ink); font-weight: 600; }
+    .empty-history { color: #a0a9a1; font-size: 10px; }
+    .demo-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 14px; padding: 13px 16px; border: 1px dashed #dce4d9; border-radius: 13px; color: #748076; font-size: 11px; }
+    .demo-bar button { flex: 0 0 auto; padding: 7px 10px; border: 1px solid #dce4d9; border-radius: 8px; background: white; color: var(--green); cursor: pointer; font-size: 10px; font-weight: 650; }
+    .demo-bar button:hover { background: #f4f7f2; }
+    .toast { position: fixed; bottom: 24px; left: 50%; z-index: 3; padding: 11px 17px; border-radius: 99px; background: #26332d; color: white; font-size: 12px; opacity: 0; pointer-events: none; transform: translate(-50%, 8px); transition: .2s; }
+    .toast.visible { opacity: 1; transform: translate(-50%, 0); }
+    footer { padding: 0 0 24px; color: #a0a8a0; text-align: center; font-size: 10px; }
+
+    @media (max-width: 780px) {
+      .shell { width: min(540px, calc(100% - 30px)); }
+      header { height: 69px; }
+      main { padding: 31px 0 35px; }
+      .layout { grid-template-columns: 1fr; gap: 16px; }
+      .preferences { padding: 22px 20px; }
+      .result-panel { grid-row: 1; }
+      .intro { margin-bottom: 20px; }
+      .header-note { font-size: 11px; }
+    }
+    @media (max-width: 390px) {
+      .shell { width: calc(100% - 22px); }
+      .preferences { padding: 19px 16px; }
+      .result-top { padding-right: 19px; padding-left: 19px; }
+      .dish-content { padding-right: 19px; padding-left: 19px; }
+      .history { padding-right: 19px; padding-left: 19px; }
+      .dish-art { margin-right: 13px; margin-left: 13px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="shell">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">饭</div>
+      <div>饭点灵感<small>LUNCH, MADE EASY</small></div>
+    </div>
+    <div class="header-note"><span class="online-dot"></span>你的午餐小助手</div>
+  </header>
+
+  <main class="shell">
+    <section class="intro">
+      <div class="eyebrow">A BETTER LUNCH BREAK</div>
+      <h1>今天午饭，吃点什么？</h1>
+      <p>告诉我你的口味和忌口，剩下的选择交给我。</p>
+    </section>
+
+    <div class="layout">
+      <section class="panel preferences" aria-labelledby="preferences-title">
+        <div class="panel-heading">
+          <div>
+            <h2 id="preferences-title">先告诉我你的偏好</h2>
+            <p>点选即可调整，偏好会保存在这台设备上</p>
+          </div>
+          <span class="step">按喜好推荐</span>
+        </div>
+
+        <div class="field">
+          <div class="field-label"><span>今天想吃什么口味？</span><span>可多选</span></div>
+          <div class="chips" id="taste-chips" aria-label="口味偏好"></div>
+        </div>
+
+        <div class="field">
+          <div class="field-label"><span>有哪些食材不吃？</span><span>选中的食材会避开</span></div>
+          <div class="chips" id="avoid-chips" aria-label="不吃的食材"></div>
+          <form class="custom-ingredient" id="custom-form">
+            <input id="custom-input" type="text" maxlength="12" placeholder="还有别的忌口？输入食材添加" aria-label="添加其他忌口食材">
+            <button class="small-button" type="submit">＋ 添加</button>
+          </form>
+        </div>
+
+        <div class="field">
+          <div class="field-label"><span>吃得轻松一点</span><span>可随时关闭</span></div>
+          <div class="rule-list">
+            <label class="rule">
+              <span><strong>少油少炸</strong><small>优先清爽做法，避开油炸菜品</small></span>
+              <span class="switch"><input id="low-oil" type="checkbox" checked><span></span></span>
+            </label>
+            <label class="rule">
+              <span><strong>尽量有主食</strong><small>推荐搭配米饭、杂粮或其他主食</small></span>
+              <span class="switch"><input id="with-staple" type="checkbox" checked><span></span></span>
+            </label>
+          </div>
+        </div>
+        <button class="recommend-button" id="recommend">✦ &nbsp;给我推荐一份</button>
+        <p class="privacy-note">仅使用演示菜单 · 偏好只保存在本地浏览器</p>
+      </section>
+
+      <section class="panel result-panel" aria-labelledby="result-heading">
+        <div class="result-top">
+          <div class="result-title">
+            <h2 id="result-heading">为你挑好了</h2>
+            <span class="date-pill" id="today-label"></span>
+          </div>
+          <p class="result-caption" id="result-caption">正在根据你的偏好寻找灵感…</p>
+        </div>
+        <div id="result-content" aria-live="polite"></div>
+        <div class="history">
+          <div class="history-head">
+            <strong>最近吃过</strong>
+            <button class="text-button" id="clear-history" type="button">清空记录</button>
+          </div>
+          <div id="history-list"></div>
+        </div>
+      </section>
+    </div>
+
+    <div class="demo-bar">
+      <span>想快速体验「连续两天不重样」？模拟一条昨天的点餐记录。</span>
+      <button id="demo-yesterday" type="button">模拟昨天吃过宫保鸡丁</button>
+    </div>
+  </main>
+  <footer class="shell">饭点灵感 · 产品体验 Demo · 菜品、价格与商家均为模拟信息</footer>
+  <div class="toast" id="toast" role="status"></div>
+
+  <script>
+    const meals = [
+      { id: "tomato-beef", name: "番茄牛腩饭", main: "番茄牛腩", ingredients: ["牛肉", "番茄", "洋葱", "胡萝卜"], tastes: ["家常", "清爽"], oil: 1, fried: false, staple: "米饭", price: 32, kcal: 568, emoji: "🍛", shop: "小满家常菜 · 评分 4.8" },
+      { id: "teriyaki-chicken", name: "照烧鸡肉饭", main: "照烧鸡肉", ingredients: ["鸡肉", "洋葱", "西兰花", "芝麻"], tastes: ["日式", "家常"], oil: 2, fried: false, staple: "米饭", price: 29, kcal: 536, emoji: "🍱", shop: "日和食堂 · 评分 4.9" },
+      { id: "kungpao", name: "宫保鸡丁饭", main: "宫保鸡丁", ingredients: ["鸡肉", "花生", "黄瓜", "辣椒"], tastes: ["川湘", "家常"], oil: 3, fried: false, staple: "米饭", price: 28, kcal: 642, emoji: "🥘", shop: "川味小馆 · 评分 4.7" },
+      { id: "steamed-fish", name: "清蒸鲈鱼杂粮饭", main: "清蒸鲈鱼", ingredients: ["鲈鱼", "姜", "葱", "糙米"], tastes: ["清爽", "家常"], oil: 1, fried: false, staple: "杂粮饭", price: 36, kcal: 492, emoji: "🐟", shop: "禾风轻食 · 评分 4.8" },
+      { id: "beef-broccoli", name: "黑椒牛肉糙米饭", main: "黑椒牛肉", ingredients: ["牛肉", "西兰花", "洋葱", "糙米"], tastes: ["清爽", "家常"], oil: 2, fried: false, staple: "糙米饭", price: 34, kcal: 558, emoji: "🥩", shop: "谷物研究所 · 评分 4.8" },
+      { id: "shrimp-egg", name: "虾仁滑蛋盖饭", main: "虾仁滑蛋", ingredients: ["虾仁", "鸡蛋", "葱", "米饭"], tastes: ["清爽", "家常"], oil: 1, fried: false, staple: "米饭", price: 31, kcal: 514, emoji: "🍳", shop: "小满家常菜 · 评分 4.8" },
+      { id: "fish-fragrant-pork", name: "鱼香肉丝饭", main: "鱼香肉丝", ingredients: ["猪肉", "木耳", "胡萝卜", "辣椒"], tastes: ["川湘", "家常"], oil: 3, fried: false, staple: "米饭", price: 27, kcal: 620, emoji: "🥢", shop: "川味小馆 · 评分 4.7" },
+      { id: "mushroom-chicken", name: "香菇鸡腿焖饭", main: "香菇鸡腿", ingredients: ["鸡肉", "香菇", "青菜", "米饭"], tastes: ["家常", "日式"], oil: 1, fried: false, staple: "米饭", price: 30, kcal: 545, emoji: "🍲", shop: "暖禾焖饭 · 评分 4.9" },
+      { id: "sour-beef", name: "酸汤肥牛饭", main: "酸汤肥牛", ingredients: ["牛肉", "金针菇", "番茄", "辣椒"], tastes: ["川湘", "清爽"], oil: 2, fried: false, staple: "米饭", price: 33, kcal: 603, emoji: "🍜", shop: "山野酸汤 · 评分 4.8" },
+      { id: "tomato-egg", name: "番茄鸡蛋盖饭", main: "番茄炒蛋", ingredients: ["鸡蛋", "番茄", "葱"], tastes: ["家常", "清爽"], oil: 1, fried: false, staple: "米饭", price: 22, kcal: 476, emoji: "🍅", shop: "小满家常菜 · 评分 4.8" },
+      { id: "curry-chicken", name: "日式咖喱鸡肉饭", main: "咖喱鸡肉", ingredients: ["鸡肉", "土豆", "胡萝卜", "洋葱"], tastes: ["日式", "家常"], oil: 3, fried: false, staple: "米饭", price: 30, kcal: 658, emoji: "🍛", shop: "日和食堂 · 评分 4.9" },
+      { id: "fried-chicken", name: "香酥鸡排饭", main: "香酥鸡排", ingredients: ["鸡肉", "鸡蛋", "面包糠"], tastes: ["家常"], oil: 4, fried: true, staple: "米饭", price: 26, kcal: 782, emoji: "🍗", shop: "街角炸物 · 评分 4.6" },
+      { id: "salmon-quinoa", name: "香煎三文鱼藜麦饭", main: "香煎三文鱼", ingredients: ["三文鱼", "牛油果", "西兰花", "藜麦"], tastes: ["清爽", "日式"], oil: 2, fried: false, staple: "藜麦饭", price: 39, kcal: 584, emoji: "🍣", shop: "禾风轻食 · 评分 4.8" },
+      { id: "pork-rice", name: "台式卤肉饭", main: "台式卤肉", ingredients: ["猪肉", "鸡蛋", "青菜", "米饭"], tastes: ["家常"], oil: 3, fried: false, staple: "米饭", price: 27, kcal: 692, emoji: "🍚", shop: "巷口卤肉饭 · 评分 4.7" }
+    ];
+
+    const tasteOptions = ["家常", "清爽", "川湘", "日式"];
+    const avoidOptions = ["香菜", "花生", "香菇", "虾仁", "牛肉", "辣椒", "洋葱", "鸡蛋"];
+    const storageKeys = { preferences: "lunch-demo-preferences-v1", history: "lunch-demo-history-v1" };
+    const defaultPreferences = { tastes: ["家常", "清爽"], avoid: [], lowOil: true, withStaple: true };
+    let preferences = load(storageKeys.preferences, defaultPreferences);
+    let history = load(storageKeys.history, {});
+    let currentMeal = null;
+    let dismissedIds = new Set();
+    let toastTimer;
+
+    function load(key, fallback) {
+      try {
+        const value = JSON.parse(localStorage.getItem(key));
+        return value && typeof value === "object" ? value : fallback;
+      } catch {
+        return fallback;
+      }
+    }
+
+    function save(key, value) {
+      localStorage.setItem(key, JSON.stringify(value));
+    }
+
+    function localDate(date = new Date()) {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
+    }
+
+    function offsetDate(days) {
+      const date = new Date();
+      date.setDate(date.getDate() + days);
+      return localDate(date);
+    }
+
+    function escapeHtml(value) {
+      return String(value).replace(/[&<>"']/g, char => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;"
+      })[char]);
+    }
+
+    function persistPreferences() {
+      save(storageKeys.preferences, preferences);
+    }
+
+    function renderChips() {
+      document.querySelector("#taste-chips").innerHTML = tasteOptions.map(taste =>
+        `<button type="button" class="chip ${preferences.tastes.includes(taste) ? "selected" : ""}" data-taste="${taste}" aria-pressed="${preferences.tastes.includes(taste)}">${taste}</button>`
+      ).join("");
+
+      const customAvoid = preferences.avoid.filter(item => !avoidOptions.includes(item));
+      const ingredients = [...avoidOptions, ...customAvoid];
+      document.querySelector("#avoid-chips").innerHTML = ingredients.map(item =>
+        `<button type="button" class="chip avoid ${preferences.avoid.includes(item) ? "selected" : ""}" data-avoid="${escapeHtml(item)}" aria-pressed="${preferences.avoid.includes(item)}">${escapeHtml(item)}${customAvoid.includes(item) ? " ×" : ""}</button>`
+      ).join("");
+
+      document.querySelector("#low-oil").checked = preferences.lowOil;
+      document.querySelector("#with-staple").checked = preferences.withStaple;
+    }
+
+    function getCandidates() {
+      const yesterdayId = history[offsetDate(-1)];
+      return meals.filter(meal =>
+        !dismissedIds.has(meal.id) &&
+        meal.id !== yesterdayId &&
+        !meal.ingredients.some(ingredient => preferences.avoid.includes(ingredient)) &&
+        (!preferences.lowOil || (!meal.fried && meal.oil <= 2)) &&
+        (!preferences.withStaple || Boolean(meal.staple))
+      );
+    }
+
+    function chooseMeal() {
+      const candidates = getCandidates();
+      if (!candidates.length) {
+        currentMeal = null;
+        renderResult();
+        return;
+      }
+
+      const ranked = candidates.map(meal => {
+        const matchedTastes = meal.tastes.filter(taste => preferences.tastes.includes(taste)).length;
+        const score = matchedTastes * 10 + (preferences.lowOil ? (3 - meal.oil) * 2 : 0) +
+          (preferences.withStaple && meal.staple ? 2 : 0) + Math.random();
+        return { meal, score };
+      }).sort((a, b) => b.score - a.score);
+      currentMeal = ranked[0].meal;
+      renderResult();
+    }
+
+    function renderResult() {
+      const container = document.querySelector("#result-content");
+      if (!currentMeal) {
+        document.querySelector("#result-caption").textContent = "這組條件下暫時沒有合適的菜，試著放寬一項偏好。";
+        container.innerHTML = `<div class="dish-content"><div class="reason-box">可以取消一种忌口或暂时关闭「少油少炸」。如果只是看完了所有候选菜，也可以重新浏览。</div><button class="recommend-button" id="empty-recommend" type="button">重新浏览符合条件的菜</button></div>`;
+        document.querySelector("#empty-recommend").addEventListener("click", () => {
+          dismissedIds.clear();
+          chooseMeal();
+        });
+        return;
+      }
+
+      const meal = currentMeal;
+      const matchedTastes = meal.tastes.filter(taste => preferences.tastes.includes(taste));
+      const reasons = [];
+      if (matchedTastes.length) reasons.push(`符合${matchedTastes.join("、")}口味`);
+      if (preferences.lowOil) reasons.push(meal.fried ? "已優先避开油炸" : `少油做法 · 油度 ${meal.oil}/4`);
+      if (preferences.withStaple) reasons.push(`搭配${meal.staple}`);
+      const previousMeal = meals.find(item => item.id === history[offsetDate(-1)]);
+      if (previousMeal) reasons.push(`主菜避开了昨天的${previousMeal.main}`);
+
+      const confirmed = history[localDate()] === meal.id;
+      document.querySelector("#result-caption").textContent = "结合口味、忌口和饮食习惯，为你挑出这一份。";
+      container.innerHTML = `
+        <div class="dish-art" aria-label="${escapeHtml(meal.name)} 示意图">
+          <span class="dish-emoji" aria-hidden="true">${meal.emoji}</span>
+          <span class="art-label">菜品示意</span>
+        </div>
+        <div class="dish-content">
+          <div class="dish-name-line"><h3 class="dish-name">${escapeHtml(meal.name)}</h3><span class="price">¥${meal.price}</span></div>
+          <div class="shop">${escapeHtml(meal.shop)} · 约 ${meal.kcal} kcal</div>
+          <div class="meta"><span>${meal.staple}</span><span>${meal.fried ? "油炸" : "非油炸"}</span><span>油度 ${meal.oil}/4</span>${meal.tastes.map(taste => `<span>${taste}</span>`).join("")}</div>
+          <div class="reason-box"><strong>推荐理由</strong>${reasons.map(escapeHtml).join(" · ") || "符合当前条件"}</div>
+          <div class="actions">
+            <button class="secondary-action" id="another" type="button">换一个看看 ↻</button>
+            <button class="primary-action" id="confirm" type="button" ${confirmed ? "disabled" : ""}>${confirmed ? "✓ 今日已选" : "就吃这个，记下来"}</button>
+          </div>
+        </div>`;
+
+      document.querySelector("#another").addEventListener("click", () => {
+        dismissedIds.add(meal.id);
+        chooseMeal();
+      });
+      document.querySelector("#confirm").addEventListener("click", confirmMeal);
+    }
+
+    function renderHistory() {
+      const container = document.querySelector("#history-list");
+      const entries = [offsetDate(-1), localDate()]
+        .filter(date => history[date])
+        .map(date => ({ date, meal: meals.find(item => item.id === history[date]) }))
+        .filter(entry => entry.meal);
+      container.innerHTML = entries.length
+        ? entries.map(({ date, meal }) => `<div class="history-row"><span class="history-day">${date === localDate() ? "今天" : "昨天"}</span><span class="history-dish">${escapeHtml(meal.main)}</span><span>${escapeHtml(meal.staple)}</span></div>`).join("")
+        : `<div class="empty-history">还没有点餐记录，选好今天的午饭后会显示在这里。</div>`;
+    }
+
+    function confirmMeal() {
+      if (!currentMeal) return;
+      history[localDate()] = currentMeal.id;
+      save(storageKeys.history, history);
+      renderHistory();
+      renderResult();
+      showToast(`记下啦，今天吃 ${currentMeal.main}`);
+    }
+
+    function showToast(message) {
+      const toast = document.querySelector("#toast");
+      toast.textContent = message;
+      toast.classList.add("visible");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove("visible"), 2200);
+    }
+
+    document.querySelector("#taste-chips").addEventListener("click", event => {
+      const button = event.target.closest("[data-taste]");
+      if (!button) return;
+      const taste = button.dataset.taste;
+      preferences.tastes = preferences.tastes.includes(taste)
+        ? preferences.tastes.filter(item => item !== taste)
+        : [...preferences.tastes, taste];
+      persistPreferences();
+      renderChips();
+    });
+
+    document.querySelector("#avoid-chips").addEventListener("click", event => {
+      const button = event.target.closest("[data-avoid]");
+      if (!button) return;
+      const ingredient = button.dataset.avoid;
+      preferences.avoid = preferences.avoid.includes(ingredient)
+        ? preferences.avoid.filter(item => item !== ingredient)
+        : [...preferences.avoid, ingredient];
+      persistPreferences();
+      renderChips();
+    });
+
+    document.querySelector("#custom-form").addEventListener("submit", event => {
+      event.preventDefault();
+      const input = document.querySelector("#custom-input");
+      const ingredient = input.value.trim();
+      if (!ingredient) {
+        input.focus();
+        return;
+      }
+      if (!preferences.avoid.includes(ingredient)) preferences.avoid.push(ingredient);
+      persistPreferences();
+      input.value = "";
+      renderChips();
+    });
+
+    document.querySelector("#low-oil").addEventListener("change", event => {
+      preferences.lowOil = event.target.checked;
+      persistPreferences();
+    });
+    document.querySelector("#with-staple").addEventListener("change", event => {
+      preferences.withStaple = event.target.checked;
+      persistPreferences();
+    });
+    document.querySelector("#recommend").addEventListener("click", () => {
+      dismissedIds.clear();
+      chooseMeal();
+    });
+
+    document.querySelector("#demo-yesterday").addEventListener("click", () => {
+      history[offsetDate(-1)] = "kungpao";
+      save(storageKeys.history, history);
+      dismissedIds.clear();
+      chooseMeal();
+      renderHistory();
+      showToast("已模拟昨天吃过宫保鸡丁，今天会避开这道主菜");
+    });
+
+    document.querySelector("#clear-history").addEventListener("click", () => {
+      history = {};
+      save(storageKeys.history, history);
+      dismissedIds.clear();
+      renderHistory();
+      chooseMeal();
+      showToast("点餐记录已清空");
+    });
+
+    const today = new Date();
+    document.querySelector("#today-label").textContent =
+      `${today.getMonth() + 1}月${today.getDate()}日 · 午餐`;
+    renderChips();
+    renderHistory();
+    chooseMeal();
+  </script>
+</body>
+</html>
